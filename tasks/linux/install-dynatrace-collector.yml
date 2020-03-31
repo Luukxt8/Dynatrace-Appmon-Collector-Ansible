@@ -3,7 +3,12 @@
   file:
     path: "{{ dynatrace_collector_linux_install_dir }}"
     state: directory
-  register: dynatrace_collector_create_install_dir_result
+  become: yes
+
+- name: "Check if installation directory {{ dynatrace_collector_linux_install_dir }} exists"
+  stat:
+    path: "{{ dynatrace_collector_linux_install_dir }}"
+  register: dynatrace_collector_install_dir_result
   become: yes
 
 - name: Change ownership of the installation directory if it had to be created
@@ -11,7 +16,7 @@
     path: "{{ dynatrace_collector_linux_install_dir }}"
     owner: "{{ dynatrace_collector_owner }}"
     group: "{{ dynatrace_collector_group }}"
-  when: dynatrace_collector_create_install_dir_result | changed
+  when: dynatrace_collector_install_dir_result.stat.exists == True 
   become: yes
 
 - name: "Copy the Dynatrace installer to {{ dynatrace_collector_linux_install_dir }} if the installer is provided locally"
