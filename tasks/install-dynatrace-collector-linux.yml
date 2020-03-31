@@ -8,7 +8,7 @@
 - include: linux/install-dependencies-apt.yml
   when: ansible_pkg_mgr == "apt"
 - include: linux/install-dependencies-yum.yml
-  when: ansible_pkg_mgr == "yum"
+  when: ansible_pkg_mgr == "yum" or ansible_pkg_mgr == "dnf"
 
 - include: linux/install-dynatrace-user.yml
 - include: linux/install-dynatrace-collector.yml
@@ -16,4 +16,4 @@
 - include: linux/remove-dependencies-apt.yml
   when: ansible_pkg_mgr == "apt"
 - include: linux/remove-dependencies-yum.yml
-  when: ansible_pkg_mgr == "yum"
+  when: ansible_pkg_mgr == "yum" or ansible_pkg_mgr == "dnf"
