@@ -53,8 +53,15 @@
   with_items: [dynatrace_collector_agent_port]
   become: yes
 
+- name: "Check if dynatrace directory already exists"
+  stat:
+    path: "{{ dynatrace_collector_linux_install_dir }}"
+  register: check_dynatrace_dir_exists_result
+  become: yes
+
 - name: Install the Dynatrace Collector
   shell: /bin/bash /tmp/run-dynatrace-collector-installer.sh
+  when: not check_dynatrace_dir_exists_result.stat.exists
   become: yes
 
 - name: Gather the name of the installation directory
