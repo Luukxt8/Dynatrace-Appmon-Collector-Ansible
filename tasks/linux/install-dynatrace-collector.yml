@@ -28,7 +28,7 @@
 
 - name: "Check if dynatrace directory already exists"
   stat:
-    path: /opt/dynatrace-7.2
+    path: /opt/dynatrace-7.2/
   register: check_dynatrace_dir_exists_result
   become: yes
 
