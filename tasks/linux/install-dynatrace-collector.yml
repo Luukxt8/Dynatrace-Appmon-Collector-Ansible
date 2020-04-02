@@ -125,10 +125,10 @@
 
 - name: Enable and start Dynatrace Collector services
   service:
-    name: dynaTraceCollector
     state: restarted
-    sleep: 5
+    daemon_reload: yes
     enabled: yes
+    name: dynaTraceCollector
   become: yes
 
 - name: "Wait for the Dynatrace Collector to become available via port {{ dynatrace_collector_agent_port }}"
