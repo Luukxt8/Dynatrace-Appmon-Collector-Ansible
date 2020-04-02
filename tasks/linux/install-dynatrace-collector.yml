@@ -26,11 +26,17 @@
   when: dynatrace_collector_installer_file_provided.stat.exists
   become: yes
 
+- name: "Check if dynatrace directory already exists"
+  stat:
+    path: "{{ dynatrace_collector_linux_install_dir }}"
+  register: check_dynatrace_dir_exists_result
+  become: yes
+
 - name: "Download the Dynatrace installer to {{ dynatrace_collector_linux_install_dir }} if the installer is not provided locally"
   get_url:
     url: "{{ dynatrace_collector_linux_installer_file_url }}"
     dest: "{{ dynatrace_collector_linux_install_dir }}"
-  when: not dynatrace_collector_installer_file_provided.stat.exists
+  when: not dynatrace_collector_installer_file_provided.stat.exists and  not check_dynatrace_dir_exists_result.stat.exists
   become: yes
 
 - name: Copy the Dynatrace Collector installer script to /tmp
@@ -51,12 +57,6 @@
     port: "{{ dynatrace_collector_agent_port }}"
     state: stopped
   with_items: [dynatrace_collector_agent_port]
-  become: yes
-
-- name: "Check if dynatrace directory already exists"
-  stat:
-    path: "{{ dynatrace_collector_linux_install_dir }}"
-  register: check_dynatrace_dir_exists_result
   become: yes
 
 - name: Install the Dynatrace Collector
